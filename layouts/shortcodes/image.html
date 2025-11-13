@@ -1,0 +1,15 @@
+{{- $src := .Get "src" -}}
+{{- if $src -}}
+  {{- $isRemote := or (strings.HasPrefix $src "http://") (strings.HasPrefix $src "https://") (strings.HasPrefix $src "//") -}}
+  {{- if not $isRemote -}}
+    {{- $normalized := replaceRE "^/" "" $src -}}
+    {{- $base := .Page.Site.BaseURL -}}
+    {{- $src = urls.JoinPath $base $normalized -}}
+  {{- end -}}
+  <img src="{{ $src | safeURL }}"
+       {{ with .Get "alt" }}alt="{{ . | plainify }}"{{ end }}
+       class="{{ with .Get "position" }}{{ . }}{{ else }}left{{ end }}"
+       {{ with .Get "style" }}style="{{ . | safeCSS }}"{{ end }}
+       {{ with .Get "width" }}width="{{ . | plainify }}"{{ end }}
+       {{ with .Get "height" }}height="{{ . | plainify }}"{{ end }} />
+{{- end -}}
