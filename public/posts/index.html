@@ -57,7 +57,7 @@
   <link rel="stylesheet" href="//localhost:1313/css/terms.min.b81791663c3790e738e571cdbf802312390d30e4b1d8dc9d814a5b5454d0ac11.css">
 
 
-
+<link rel="stylesheet" href="//localhost:1313/terminal.css">
 
 
 
@@ -105,13 +105,17 @@
 <body>
 
 
-<div class="container">
+<div class="container center">
 
   <header class="header">
   <div class="header__inner">
     <div class="header__logo">
-      <a href="/">
-  <div class="logo">
+      
+
+
+
+<a href="/" aria-label="thrensa.app">
+  <div class="logo logo--text">
     thrensa.app
   </div>
 </a>
@@ -122,10 +126,6 @@
   <li class="menu__trigger">Menu&nbsp;▾</li>
   <li>
     <ul class="menu__dropdown">
-      
-        
-          <li><a href="/about">About</a></li>
-        
       
         
           <li><a href="/posts">Posts</a></li>
@@ -143,10 +143,6 @@
     <nav class="navigation-menu">
   <ul class="navigation-menu__inner menu--desktop">
     
-      
-        
-          <li><a href="/about" >About</a></li>
-        
       
         
           <li><a href="/posts" >Posts</a></li>
@@ -168,20 +164,10 @@
     
       <article class="post on-list">
         <h2 class="post-title">
-          <a href="//localhost:1313/posts/test/">Hello, Terminal Theme</a>
+          <a href="//localhost:1313/posts/2025-11-13_parnorama-riscv/">Parnorama‑RISCV: is this possible?</a>
         </h2>
-        <div class="post-meta"><time class="post-date">2025-11-13</time></div>
+        <div class="post-meta"><time class="post-date">2021-08-25</time><span class="post-author">tinywifi</span></div>
 
-        
-          <span class="post-tags">
-            
-            #<a href="//localhost:1313/tags/hugo/">hugo</a>&nbsp;
-            
-            #<a href="//localhost:1313/tags/terminal/">terminal</a>&nbsp;
-            
-            #<a href="//localhost:1313/tags/thensa-blog/">thensa-blog</a>&nbsp;
-            
-          </span>
         
 
         
@@ -189,18 +175,50 @@
 
         <div class="post-content">
           
-            <p>Welcome to <strong>Thensa Blog</strong>! This is my very first post using the Hugo Terminal theme.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="c">&lt;!-- Example code block to see syntax highlighting --&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;hello&#34;</span><span class="p">&gt;</span>
-</span></span><span class="line"><span class="cl">  Hello, Terminal!
-</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-</span></span></code></pre></div>
+            <blockquote>
+<p>Could the Minecraft panorama shader hide a full RISC‑V stack??? I wasn’t sure either—now it’s panorama with
+panoramics per second.</p>
+</blockquote>
+<h2 id="quick-specs">Quick Specs</h2>
+<ul>
+<li>RV32IMA + Zicsr + Zifencei running entirely inside a fragment shader (machine + supervisor modes intact).</li>
+<li>64 MiB RAM tucked into a 2048×2048 RGBA32UI ping-pong texture; the top-left 128×128 tile mirrors registers/CSRs.</li>
+<li>16550A UART overlay, keyboard input, and CLINT timer/software IRQs—all glued together in shader space.</li>
+<li>Fragment loop knocks out 100+ instructions every frame, hitting ~200 kHz on a 2080 Ti (Java fallback still manages
+~15 kHz).</li>
+<li>Drop your own RV32 payload with one call:</li>
+</ul>
+
+
+
+<details class="collapsable-code" open>
+    <summary title="Click to interact"><span class="collapsable-code__title">Loading a payload</span></summary>
+    <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">RiscVManager</span><span class="w"> </span><span class="n">mgr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RiscVManager</span><span class="p">.</span><span class="na">getInstance</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">mgr</span><span class="p">.</span><span class="na">loadProgram</span><span class="p">(</span><span class="n">myPayload</span><span class="p">,</span><span class="w"> </span><span class="n">0x80000000</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">mgr</span><span class="p">.</span><span class="na">start</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span></span></span></code></pre></div></details>
+
+<h2 id="how-the-shader-keeps-its-chill">How the Shader Keeps Its Chill</h2>
+<ul>
+<li>Every frame, the fragment shader pulls CPU state from that 128×128 tile, runs a batch of ticks, and writes the
+refreshed state back into the swap texture—no CPU handholding required.</li>
+<li>RAM writes pile up in a tiny register-resident cache; the commit pass flushes everything to the big texture so the
+next frame sees a coherent memory image.</li>
+<li>Instruction decode leans on table-driven [forcecase] jump tables so DXC doesn’t implode, and even the unaligned
+loads loop politely instead of exploding into inlined confetti.</li>
+<li>If the GPU taps out, the Java fallback resumes straight from the texture snapshot—zero drama, just a quick baton
+pass.</li>
+</ul>
+<h2 id="prime-time-demo-pun-required">Prime Time Demo (pun required)</h2>
+<p>Below is the exact toolchain I’m using for the “primes up to 10 000” benchmark that now runs as a built-in program
+(<code>load prime</code> → <code>run</code>).</p>
           
         </div>
 
         
            <div>
-            <a class="read-more button inline" href="/posts/test/">[Read more]</a>
+            <a class="read-more button inline" href="/posts/2025-11-13_parnorama-riscv/">[Read more]</a>
           </div>
         
       </article>
