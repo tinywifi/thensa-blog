@@ -1,0 +1,9 @@
+{{ $site := $.Site }}
+{{ $logoLink := default $site.BaseURL $site.Params.Logo.logoHomeLink }}
+{{ $logoText := default $site.Title $site.Params.Logo.logoText }}
+
+<a href="{{ $logoLink }}" aria-label="{{ $site.Title }}">
+  <div class="logo logo--text">
+    {{ $logoText }}
+  </div>
+</a>
