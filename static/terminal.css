@@ -392,3 +392,27 @@ button {
   font-weight: 600;
   letter-spacing: 0.08em;
 }
+
+.footer__feeds {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  font-size: 0.9em;
+}
+
+.footer__feeds span {
+  color: color-mix(in srgb, var(--foreground) 75%, var(--background));
+}
+
+.footer__feeds a {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.footer__feeds a:hover,
+.footer__feeds a:focus {
+  text-decoration: underline;
+}
