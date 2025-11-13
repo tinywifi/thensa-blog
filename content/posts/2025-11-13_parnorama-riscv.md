@@ -1,6 +1,6 @@
 ---
   title: "Parnorama‑RISCV: is this possible?"
-  date: 2021-08-25
+  date: 2025-11-13
   author: "tinywifi"
 ---
 
