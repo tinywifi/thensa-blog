@@ -1,0 +1,51 @@
+{{- $site := .Site -}}
+{{- $homeURL := $site.BaseURL -}}
+{{- $feedURL := (print (strings.TrimRight "/" $homeURL) "/feed.json") -}}
+{{- $rssURL := (print (strings.TrimRight "/" $homeURL) "/index.xml") -}}
+{{- $contentSection := default "posts" $site.Params.contentTypeName -}}
+{{- $pages := where $site.RegularPages "Section" $contentSection -}}
+{
+  "version": "https://jsonfeed.org/version/1.1",
+  "title": {{ $site.Title | jsonify }},
+  "home_page_url": {{ $homeURL | jsonify }},
+  "feed_url": {{ $feedURL | jsonify }},
+  "description": {{ with $site.Params.subtitle }}{{ . | jsonify }}{{ else }}{{ $site.Title | jsonify }}{{ end }},
+  "language": {{ $site.Language.Lang | default "en" | jsonify }},
+  "authors": [
+    {{- if $site.Params.owner -}}
+    {
+      "name": {{ $site.Params.owner | jsonify }}
+    }
+    {{- else -}}
+    {
+      "name": {{ $site.Title | jsonify }}
+    }
+    {{- end -}}
+  ],
+  "hubs": [
+    {
+      "type": "rss",
+      "url": {{ $rssURL | jsonify }}
+    }
+  ],
+  "items": [
+    {{- $first := true -}}
+    {{- range $pages.ByDate.Reverse -}}
+      {{- if not $first }},{{ end -}}
+      {{- $first = false -}}
+      {
+        "id": {{ .Permalink | jsonify }},
+        "url": {{ .Permalink | jsonify }},
+        "title": {{ .Title | jsonify }},
+        "content_html": {{ .Content | jsonify }},
+        "summary": {{ (or .Summary .Description .Plain) | jsonify }},
+        "date_published": {{ with .PublishDate }}{{ .Format "2006-01-02T15:04:05Z07:00" | jsonify }}{{ else }}{{ .Date.Format "2006-01-02T15:04:05Z07:00" | jsonify }}{{ end }},
+        {{- with .Lastmod }}
+        "date_modified": {{ .Format "2006-01-02T15:04:05Z07:00" | jsonify }},
+        {{- end }}
+        "tags": {{ with .Params.tags }}{{ . | jsonify }}{{ else }}[]{{ end }},
+        "author": {{ with .Params.author }}{ "name": {{ . | jsonify }} }{{ else }}{ "name": {{ $site.Params.owner | default $site.Title | jsonify }} }{{ end }}
+      }
+    {{- end -}}
+  ]
+}
