@@ -259,4 +259,4 @@
   };
   {{< /code >}}
 
-  {{< image src="/img/2025-11-13_parnorama-riscv_showcase.png" alt="parnorama-riscv_showcase" position="center" style="border-radius:8px;" >}}
+  ![parnorama-riscv_showcase]({{ "/img/2025-11-13_parnorama-riscv_showcase.png" | relURL }})

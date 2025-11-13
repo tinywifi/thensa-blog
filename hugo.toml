@@ -1,4 +1,4 @@
-baseURL = "/"
+baseURL = "https://tinywifi.github.io/thensa-blog/"
 languageCode = "en-us"
 title = "thrensa.app"
 # Don't set theme = "terminal" if using Hugo Modules, it can cause module errors.
