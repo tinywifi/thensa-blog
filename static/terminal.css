@@ -1,6 +1,15 @@
 /* Fira Code: https://github.com/tonsky/FiraCode */
 @import url('https://cdn.staticdelivr.com/gfonts/css2?family=Fira+Code:wght@300..700&display=swap');
 
+/* Minecraft font by Idrees Hassan (MIT) - https://github.com/IdreesInc/Minecraft-Font */
+@font-face {
+  font-family: "Minecraft";
+  src: url("./fonts/minecraft.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --background: #1d2021;
   --foreground: #ebdbb2;
@@ -8,6 +17,15 @@
   --radius: 0;
   --font-size: 1rem;
   --line-height: 1.54em;
+  --font-family-base:
+    "Fira Code",
+    "JetBrains Mono",
+    Monaco,
+    Consolas,
+    "Ubuntu Mono",
+    monospace;
+  --font-family-code: var(--font-family-base);
+  --font-family-logo: "JetBrains Mono", "Fira Code", monospace;
 }
 
 html {
@@ -23,13 +41,7 @@ html {
 }
 
 body {
-  font-family:
-    "Fira Code",
-    "JetBrains Mono",
-    Monaco,
-    Consolas,
-     "Ubuntu Mono",
-    monospace;
+  font-family: var(--font-family-base);
   font-size: var(--font-size);
   font-weight: 400;
   line-height: var(--line-height);
@@ -41,6 +53,28 @@ body {
   -webkit-text-size-adjust: 100%;
   margin: 0;
   padding: 0;
+}
+
+body.font-mode-mc {
+  --font-family-base:
+    "Minecraft",
+    "Fira Code",
+    "JetBrains Mono",
+    Monaco,
+    Consolas,
+    "Ubuntu Mono",
+    monospace;
+  --font-family-code:
+    "Minecraft",
+    "Fira Code",
+    "JetBrains Mono",
+    Monaco,
+    Consolas,
+    "Ubuntu Mono",
+    monospace;
+  --font-family-logo:
+    "Minecraft",
+    monospace;
 }
 
 h1 {
@@ -250,13 +284,7 @@ ol li {
 
 code,
 kbd {
-  font-family:
-    "Fira Code",
-    "JetBrains Mono",
-    Monaco,
-    Consolas,
-    Ubuntu Mono,
-    monospace !important;
+  font-family: var(--font-family-code) !important;
   font-feature-settings: normal;
   background: color-mix(in srgb, var(--foreground) 5%, transparent);
   color: color-mix(in srgb, var(--foreground) 5%, var(--accent));
@@ -388,7 +416,7 @@ button {
 
 /* Logo text overrides */
 .logo--text {
-  font-family: "JetBrains Mono", "Fira Code", monospace;
+  font-family: var(--font-family-logo);
   font-weight: 600;
   letter-spacing: 0.08em;
 }
@@ -416,3 +444,66 @@ button {
 .footer__feeds a:focus {
   text-decoration: underline;
 }
+
+.header__nav-row {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.header__nav-row > .navigation-menu {
+  flex: 1 1 auto;
+}
+
+.font-picker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  border: 1px solid color-mix(in srgb, var(--foreground) 65%, transparent);
+  border-radius: calc(var(--radius) * 1.6 + 6px);
+  font-size: 0.9em;
+  background: color-mix(in srgb, var(--background) 80%, transparent);
+}
+
+.font-picker__label {
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.75em;
+  color: color-mix(in srgb, var(--foreground) 80%, var(--background));
+}
+
+.font-picker__options {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.font-picker__button {
+  border-width: 2px;
+  padding: 4px 10px;
+  font-size: 0.85em;
+  line-height: 1;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.font-picker__button[aria-pressed="true"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--background);
+}
+
+@media (min-width: 768px) {
+  .header__nav-row {
+    align-items: flex-start;
+    gap: 18px;
+  }
+
+  .font-picker {
+    margin-left: auto;
+  }
+}
+

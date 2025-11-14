@@ -1,0 +1,29 @@
+<header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      {{ partial "logo.html" . }}
+    </div>
+    {{ if len $.Site.Menus }}
+      {{ partial "mobile-menu.html" . }}
+    {{ end }}
+    {{ if and $.Site.Params.showLanguageSelector (len $.Site.Home.AllTranslations) }}
+      {{ partial "language-menu.html" . }}
+    {{ end }}
+  </div>
+  {{ if len $.Site.Menus }}
+    <div class="header__nav-row">
+      {{ partial "menu.html" . }}
+      <div class="font-picker" data-font-picker>
+        <span class="font-picker__label">Font</span>
+        <div class="font-picker__options" role="group" aria-label="Font options">
+          <button type="button" class="font-picker__button" data-font-option="default" aria-pressed="false">
+            Terminal
+          </button>
+          <button type="button" class="font-picker__button" data-font-option="minecraft" aria-pressed="false">
+            Minecraft
+          </button>
+        </div>
+      </div>
+    </div>
+  {{ end }}
+</header>
