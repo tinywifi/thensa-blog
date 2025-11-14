@@ -4,8 +4,7 @@
   author: "tinywifi"
 ---
 
-  > Could the Minecraft panorama shader hide a full RISC‑V stack??? I wasn’t sure either—now it’s panorama with
-  panoramics per second.
+  > Could the Minecraft panorama shader hide a full RISC‑V stack??? I wasn’t sure either—now it’s panorama with panoramics per second.
 
   ## Quick Specs
 
